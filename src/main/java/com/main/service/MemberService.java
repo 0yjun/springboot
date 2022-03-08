@@ -6,32 +6,39 @@ import java.util.Optional;
 import com.main.domain.Member;
 import com.main.repository.MemberRepository;
 import com.main.repository.MemoryMemberRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public class MemberService {
-	private final MemberRepository memberRepository = new MemoryMemberRepository();
-	
-	/*È¸¿ø°¡ÀÔ*/
+@Service
+public class MemberService{
+	private final MemberRepository memberRepository;
+	@Autowired
+	public MemberService(MemberRepository memberRepository) {
+		this.memberRepository = memberRepository;
+	}
+
+	/*íšŒì›ê°€ì…*/
 	public Long join(Member member) {
-		//Áßº¹È¸¿ø x
+		//ï¿½ßºï¿½È¸ï¿½ï¿½ x
 		validateDuplicateMember(member);
-		
+
 		memberRepository.save(member);
 		return member.getId();
 	}
 
 	private void validateDuplicateMember(Member member) {
 		memberRepository.findByName(member.getName()).ifPresent(m->{
-			throw new IllegalStateException("ÀÌ¹Ì Á¸ÀçÇÏ´Â È¸¿øÀÔ´Ï´Ù.");
+			throw new IllegalStateException("ì´ë¯¸ ì¡´ì¬í•˜ëŠ” íšŒì›ì…ë‹ˆë‹¤.");
 		});
 	}
-	
+
 	public List<Member> findMembers(){
 		return memberRepository.findAll();
 	}
-	
+
 	public Optional<Member> findeOne(Long memberId){
 		return memberRepository.findById(memberId);
 	}
-	
-	
+
+
 }

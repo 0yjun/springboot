@@ -1,17 +1,34 @@
 package com.main.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
 
-import org.assertj.core.api.Assertions;
+import  static org.assertj.core.api.Assertions.*;
+
+import com.main.repository.MemberRepository;
+import com.main.repository.MemoryMemberRepository;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.BootstrapWith;
 
 import com.main.domain.Member;
 
 class MemberServiceTest {
-	MemberService memberService = new MemberService();
+	MemberService memberService;
+	MemoryMemberRepository memberRepository;
+
+	@BeforeEach
+	public void beforeEach(){
+		memberRepository = new MemoryMemberRepository();
+		memberService = new MemberService(memberRepository);
+	}
+	@AfterEach
+	public void afterEach() {
+		memberRepository.clearStore();
+	}
 
 	@Test
 	void testJoin() {
@@ -23,9 +40,9 @@ class MemberServiceTest {
 		Long saveId = memberService.join(member);
 		//then
 		Member findMember = memberService.findeOne(saveId).get();
-		Assertions.assertThat(member.getName()).isEqualTo(findMember.getName());
+		assertThat(member.getName()).isEqualTo(findMember.getName());
 	}
-	
+
 	@Test
 	public void validateDuplicateMember() {
 		//given
@@ -38,21 +55,9 @@ class MemberServiceTest {
 		//when
 		memberService.join(member1);
 		
-		try {
-			memberService.join(member2);
-			fail("�ߺ� ���ܹ߻�");
-		} catch (IllegalStateException e) {
-			// TODO: handle exception
-		}
-	}
-	@Test
-	void testFindMembers() {
-		fail("Not yet implemented");
+		IllegalStateException e = assertThrows(IllegalStateException.class,()->memberService.join(member2));
+		assertThat(e.getMessage()).isEqualTo("이미 존재하는 회원입니다.");
 	}
 
-	@Test
-	void testFindeOne() {
-		fail("Not yet implemented");
-	}
 
 }

@@ -7,11 +7,15 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.main.domain.Member;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class MemoryMemberRepository implements MemberRepository{
 	
 	public static Map<Long, Member> store = new HashMap<>();
 	public static long sequence = 0L;
+
+
 	@Override
 	public Member save(Member member) {
 		member.setId(++sequence);
@@ -35,6 +39,7 @@ public class MemoryMemberRepository implements MemberRepository{
 	}
 	
 	public void clearStore() {
+		System.out.println("clear done");
 		store.clear();
 	}
 
