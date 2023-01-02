@@ -1,0 +1,48 @@
+
+server:
+  port: 4000
+  servlet:
+    session:
+      timeout: 10s
+
+spring:
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/camss?characterEncoding=UTF-8
+    username: camss
+    password: asdf4019
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database: mysql
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  sql:
+    init:
+      mode: always
+
+#  data:
+#    web:
+#      pageable:
+#        default-page-size: 10
+#        one-indexed-parameters: true
+#
+#  session:
+#    store-type: redis
+#
+#  redis:
+#    host: tns-soft.co.kr
+#    port: 6379
+#    password: 'aidataops'
+#
+#jasypt:
+#  encryptor:
+#    bean: jasyptStringEncryptor
